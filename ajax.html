@@ -8,26 +8,40 @@
   </head>
   <body>
     <script>
-      const sendHttpRequest = (method, url) => {
+      const sendHttpRequest = (method, url, data) => {
         const promise = new Promise((resolve, reject) => {
           let http = new XMLHttpRequest();
           http.open(method, url);
           http.responseType = "json"; //this is done to retrive the response on json by defualt.
+          if (data) {
+            http.setRequestHeader("Content-Type", "application/json");
+          }
+
           http.onload = () => {
+            if (http.status >= 400) {
+              reject(http.response);
+            }
             resolve(http.response);
           };
 
-          http.send();
+          http.onerror = () => {
+            reject("Somthing went wrong!");
+          };
+          http.send(JSON.stringify(data));
         });
         return promise;
       };
 
-      
-      sendHttpRequest("get", "https://reqres.in/api/users?page=2").then(
-        (responseData) => {
+      sendHttpRequest("post", "https://reqres.in/api/register", {
+        email: "eve.holt@reqres.in",
+        password: "pistol",
+      })
+        .then((responseData) => {
           console.log(responseData);
-        }
-      );
+        })
+        .catch((error) => {
+          console.log(error);
+        });
 
       //   this get request
       //   sendHttpRequest("get", "https://reqres.in/api/users?page=2").then(

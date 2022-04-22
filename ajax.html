@@ -9,9 +9,13 @@
   <body>
     <script>
       let http = new XMLHttpRequest();
-      http.open("POST", "dignezer.test/outlet/manage/hu_blevins", true);
+      http.open("GET", "https://reqres.in/api/users");
+      http.responseType = "json"; //this is done to retrive the response on json by defualt.
+      http.onload = () => {
+        const data = http.response;
+        console.log(data);
+      };
       http.send();
-      console.log();
     </script>
   </body>
 </html>

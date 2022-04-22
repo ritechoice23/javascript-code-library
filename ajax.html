@@ -8,14 +8,46 @@
   </head>
   <body>
     <script>
-      let http = new XMLHttpRequest();
-      http.open("GET", "https://reqres.in/api/users");
-      http.responseType = "json"; //this is done to retrive the response on json by defualt.
-      http.onload = () => {
-        const data = http.response;
-        console.log(data);
+      const sendHttpRequest = (method, url) => {
+        const promise = new Promise((resolve, reject) => {
+          let http = new XMLHttpRequest();
+          http.open(method, url);
+          http.responseType = "json"; //this is done to retrive the response on json by defualt.
+          http.onload = () => {
+            resolve(http.response);
+          };
+
+          http.send();
+        });
+        return promise;
       };
-      http.send();
+
+      
+      sendHttpRequest("get", "https://reqres.in/api/users?page=2").then(
+        (responseData) => {
+          console.log(responseData);
+        }
+      );
+
+      //   this get request
+      //   sendHttpRequest("get", "https://reqres.in/api/users?page=2").then(
+      //         (responseData) => {
+      //           console.log(responseData);
+      //         }
+
+      //       );
     </script>
   </body>
 </html>
+
+<!-- 
+var promise = new Promise(function(resolve, reject) {
+  // do a thing, possibly async, then…
+
+  if (/* everything turned out fine */) {
+    resolve("Stuff worked!");
+  }
+  else {
+    reject(Error("It broke"));
+  }
+}); -->
